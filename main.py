@@ -4,6 +4,7 @@ import logging
 import queue
 import signal
 import tkinter as tk
+from functools import partial
 from tkinter import ttk, VERTICAL, HORIZONTAL, N, S, E, W
 from tkinter.scrolledtext import ScrolledText
 
@@ -87,32 +88,20 @@ class FormUi:
         )
         self.combobox.current(0)
         self.combobox.grid(column=1, row=0, sticky=(W, E))
-        # Create a text field to enter a message
-        self.message = tk.StringVar()
-        ttk.Label(self.frame, text='Message:').grid(column=0, row=1, sticky=W)
-        ttk.Entry(self.frame, textvariable=self.message, width=25).grid(column=1, row=1, sticky=(W, E))
 
-        # Add a button to log the message
-        self.button = ttk.Button(self.frame, text='Submit', command=self.submit_message)
-        self.button.grid(column=1, row=2, sticky=W)
-
-        self.button = ttk.Button(self.frame, text='Problem 01',
-                                 command=lambda: self.submit_message_with_callback(homework01.problema1))
-        self.button.grid(column=1, row=3, sticky=W)
-
-        self.button = ttk.Button(self.frame, text='Problem 02',
-                                 command=lambda: self.submit_message_with_callback(homework01.problema2))
-        self.button.grid(column=1, row=4, sticky=W)
-
-    def submit_message(self):
-        # Get the logging level numeric value
-        lvl = getattr(logging, self.level.get())
-        logger.log(lvl, self.message.get())
+        # keep these two lists synchronized
+        self.button_list = list()
+        for i in range(0, homework01.PROBLEMS_COUNT):
+            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1)))
+            self.button_list[-1].config(command=partial(
+                self.submit_message_with_callback, homework01.get_function_by_index(i)))
+            self.button_list[-1].grid(column=1, row=i + 1, sticky=W)
 
     def submit_message_with_callback(self, callback):
-        # Get the logging level numeric value
         lvl = getattr(logging, self.level.get())
+
         result = callback()
+
         logger.log(lvl, '{}'.format(result))
 
 

@@ -1,3 +1,17 @@
+PROBLEMS_COUNT = 3
+
+
+def get_function_by_index(index):
+    if index == 0:
+        return problema1
+    elif index == 1:
+        return problema2
+    elif index == 2:
+        return problema2
+    else:
+        raise 'Problem # does not exist!'
+
+
 def problema1():
     power = -1.0
     u = 10.0 ** power  # initially, u = 10 ^ (-1)
@@ -27,4 +41,4 @@ def problema2():
     message_mul = \
         'Inmultire asociativa: {} ({}, {})'.format(left_mul == right_mul, left_mul, right_mul)
 
-    return '{}{}\n'.format(message_assoc, message_mul)
+    return '{}{}'.format(message_assoc, message_mul)
