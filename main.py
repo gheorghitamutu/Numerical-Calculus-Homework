@@ -2,6 +2,7 @@
 
 import logging
 import queue
+import threading
 import tkinter as tk
 from functools import partial
 from tkinter import ttk, VERTICAL, HORIZONTAL, N, S, E, W
@@ -10,6 +11,7 @@ from tkinter.scrolledtext import ScrolledText
 # HOMEWORK IMPORTS
 import homework01
 import homework02
+import homework03
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +89,7 @@ class FormUi:
         for i in range(0, homework01.PROBLEMS_COUNT):
             self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1)))
             self.button_list[-1].config(command=partial(
-                self.submit_message_with_callback, homework01.get_function_by_index(i)))
+                self.submit_message_with_callback_threaded, homework01.get_function_by_index(i)))
             self.button_list[-1].grid(column=0, row=i + 2, sticky=E)  # offset of 2 for row index (0 - label, 1 - sep)
 
         ttk.Label(self.frame, text='Homework 02').grid(column=0, row=5)
@@ -95,16 +97,34 @@ class FormUi:
         for i in range(0, homework02.PROBLEMS_COUNT):
             self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1)))
             self.button_list[-1].config(command=partial(
-                self.submit_message_with_callback, partial(homework02.get_function_by_index(i), logger.info)))
+                self.submit_message_with_callback_threaded, partial(homework02.get_function_by_index(i), logger.info)))
             # offset of 2 for row index (0 - label, 1 - sep) + homework label + previous homework problem count
             self.button_list[-1].grid(column=0, row=i + 2 + 1 + homework01.PROBLEMS_COUNT, sticky=E)
+
+        ttk.Label(self.frame, text='Homework 03').grid(column=0, row=7)
+        ttk.Separator(frame, orient=HORIZONTAL).grid(row=8, column=0, sticky="ew")
+        for i in range(0, homework03.PROBLEMS_COUNT):
+            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1)))
+            self.button_list[-1].config(command=partial(
+                self.submit_message_with_callback_threaded, partial(homework03.get_function_by_index(i), logger.info)))
+            # offset of 2 for row index (0 - label, 1 - sep) + homework label + previous homework problem count
+            self.button_list[-1].grid(
+                column=0, row=i + 2 + 1 + homework01.PROBLEMS_COUNT + 2 + 1 + homework02.PROBLEMS_COUNT, sticky=E)
 
         # ... ADD NEXT HOMEWORK AND ITS BUTTONS
 
     def submit_message_with_callback(self, callback):
         result = callback()
-        lvl = getattr(logging, self.level)
-        logger.log(lvl, '{}'.format(result))
+
+        if result is not None:
+            lvl = getattr(logging, self.level)
+            logger.log(lvl, '{}'.format(result))
+
+    def submit_message_with_callback_threaded(self, callback):
+        # don't block the GUI main thread while computing!
+        thread = threading.Thread(target=self.submit_message_with_callback, args=(callback,))
+        thread.start()
+        # no need to join the thread
 
 
 class App:

@@ -9,7 +9,7 @@ def get_function_by_index(index):
     if index == 0:
         return default_input  # function pointer used as button callback/handler
     else:
-        raise 'Problem # does not exist!'
+        raise 'Problem #{} does not exist!'.format(index)
 
 
 def get_determinant(X):
@@ -185,6 +185,7 @@ def compute_euclidian_norm_expression_2(A, b, eps):
     # ||x_LU - x_lib||_2
     sol = solve_system(A, b, eps)
     sol_lib = np.linalg.solve(A, b)
+    # print('sol_lib', sol_lib)  # should be 1, 2, -1
 
     res = list()
     for index, (i, j) in enumerate(zip(sol, sol_lib)):
@@ -287,7 +288,11 @@ def default_input(out_cb):
     out_cb('6)')
     out_cb('Inversed Matrix A')
     out_cb(get_inv_matrix(A))
+    A = [[1, 1, -1], [1, -2, 3], [2, 3, 1]]
+    # A = [[3, 3, 3], [2, 2, 2], [1, 1, 1]]
+    b = [4, -6, 7]
     out_cb('||x_LU - x_lib||_2 -> {}'.format(compute_euclidian_norm_expression_2(A, b, eps)))
+
     out_cb('||x_LU - (A_lib)^(-1) * b_init||_2 -> {}'.format(compute_euclidian_norm_expression_3(A, b, eps)))
 
     out_cb('\n--------------------------------------------------------------------------------------------------------')
