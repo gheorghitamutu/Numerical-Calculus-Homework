@@ -37,7 +37,7 @@ class ConsoleUi:
         self.frame = frame
 
         # Create a ScrolledText widget
-        self.scrolled_text = ScrolledText(frame, state='disabled', height=12)
+        self.scrolled_text = ScrolledText(frame, state='disabled', height=30, width=110)
         self.scrolled_text.grid(row=0, column=0, sticky=(N, S, W, E))
 
         self.scrolled_text.configure(font='TkFixedFont')
@@ -82,34 +82,34 @@ class FormUi:
         self.frame = frame
         self.level = 'INFO'
 
-        ttk.Label(self.frame, text='Homework 01').grid(column=0, row=0)
+        ttk.Label(self.frame, text='Homework 01', width=50, anchor='center').grid(column=0, row=0)
         ttk.Separator(frame, orient=HORIZONTAL).grid(row=1, column=0, sticky="ew")
 
         self.button_list = list()
         for i in range(0, homework01.PROBLEMS_COUNT):
-            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1)))
+            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1), width=50))
             self.button_list[-1].config(command=partial(
                 self.submit_message_with_callback_threaded, homework01.get_function_by_index(i)))
             self.button_list[-1].grid(column=0, row=i + 2, sticky=E)  # offset of 2 for row index (0 - label, 1 - sep)
 
-        ttk.Label(self.frame, text='Homework 02').grid(column=0, row=5)
+        ttk.Label(self.frame, text='Homework 02', width=50, anchor='center').grid(column=0, row=5)
         ttk.Separator(frame, orient=HORIZONTAL).grid(row=6, column=0, sticky="ew")
         for i in range(0, homework02.PROBLEMS_COUNT):
-            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1)))
+            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1), width=50))
             self.button_list[-1].config(command=partial(
                 self.submit_message_with_callback_threaded, partial(homework02.get_function_by_index(i), logger.info)))
-            # offset of 2 for row index (0 - label, 1 - sep) + homework label + previous homework problem count
-            self.button_list[-1].grid(column=0, row=i + 2 + 1 + homework01.PROBLEMS_COUNT, sticky=E)
+            # offset of 2 for row index (0 - label, 1 - sep) + homework label + sep + previous homework problem count
+            self.button_list[-1].grid(column=0, row=i + 2 + 1 + 1 + homework01.PROBLEMS_COUNT, sticky=E)
 
-        ttk.Label(self.frame, text='Homework 03').grid(column=0, row=7)
-        ttk.Separator(frame, orient=HORIZONTAL).grid(row=8, column=0, sticky="ew")
+        ttk.Label(self.frame, text='Homework 03', width=50, anchor='center').grid(column=0, row=8)
+        ttk.Separator(frame, orient=HORIZONTAL).grid(row=9, column=0, sticky="ew")
         for i in range(0, homework03.PROBLEMS_COUNT):
-            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1)))
+            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1), width=50))
             self.button_list[-1].config(command=partial(
                 self.submit_message_with_callback_threaded, partial(homework03.get_function_by_index(i), logger.info)))
-            # offset of 2 for row index (0 - label, 1 - sep) + homework label + previous homework problem count
+            # offset of 2 for row index (0 - label, 1 - sep) + homework label + sep + previous homework problem count
             self.button_list[-1].grid(
-                column=0, row=i + 2 + 1 + homework01.PROBLEMS_COUNT + 2 + 1 + homework02.PROBLEMS_COUNT, sticky=E)
+                column=0, row=i + 2 + 1 + homework01.PROBLEMS_COUNT + 2 + 1 + 1 + homework02.PROBLEMS_COUNT, sticky=E)
 
         # ... ADD NEXT HOMEWORK AND ITS BUTTONS
 
