@@ -185,7 +185,7 @@ def compute_euclidian_norm_expression_2(A, b, eps):
     # ||x_LU - x_lib||_2
     sol = solve_system(A, b, eps)
     sol_lib = np.linalg.solve(A, b)
-    # print('sol_lib', sol_lib)  # should be 1, 2, -1
+    # print('sol_lib', sol_lib)
 
     res = list()
     for index, (i, j) in enumerate(zip(sol, sol_lib)):
