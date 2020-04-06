@@ -12,6 +12,7 @@ from tkinter.scrolledtext import ScrolledText
 import homework01
 import homework02
 import homework03
+import homework04
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +111,19 @@ class FormUi:
             # offset of 2 for row index (0 - label, 1 - sep) + homework label + sep + previous homework problem count
             self.button_list[-1].grid(
                 column=0, row=i + 2 + 1 + homework01.PROBLEMS_COUNT + 2 + 1 + 1 + homework02.PROBLEMS_COUNT, sticky=E)
+
+        ttk.Label(self.frame, text='Homework 04', width=50, anchor='center').grid(column=0, row=13)
+        ttk.Separator(frame, orient=HORIZONTAL).grid(row=14, column=0, sticky="ew")
+        for i in range(0, homework04.PROBLEMS_COUNT):
+            self.button_list.append(ttk.Button(self.frame, text='Problem 0{}'.format(i + 1), width=50))
+            self.button_list[-1].config(command=partial(
+                self.submit_message_with_callback_threaded, partial(homework04.get_function_by_index(i), logger.info)))
+            self.button_list[-1].grid(
+                column=0,
+                row=i + 2 + 1 + homework01.PROBLEMS_COUNT +
+                    2 + 1 + 1 + homework02.PROBLEMS_COUNT +
+                    2 + 1 + 1 + homework03.PROBLEMS_COUNT,
+                sticky=E)
 
         # ... ADD NEXT HOMEWORK AND ITS BUTTONS
 
